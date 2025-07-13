@@ -1,0 +1,94 @@
+# Firewall Policies
+# Version: 2023-10-27-A
+# Lines starting with # are comments.
+# App blocks are separated by ---
+
+# --- ESSENTIAL SERVICES ---
+
+appName=DNS
+# Allow DNS queries TO these specific servers
+allowedProtocols=UDP,TCP
+# Replace 192.168.0.1 with YOUR ACTUAL ROUTER'S IP ADDRESS
+allowedIPs=192.168.0.1,8.8.8.8,1.1.1.1
+defaultAction=ALLOW
+---
+appName=HTTPS
+# General policy for HTTPS (TCP port 443)
+# By leaving allowedDomains and allowedIPs empty AND setting defaultAction=ALLOW,
+# any HTTPS traffic will be permitted by this app-specific policy,
+# provided the protocol matches "HTTPS".
+allowedProtocols=HTTPS
+allowedDomains=
+allowedIPs=
+defaultAction=ALLOW
+---
+appName=HTTP
+# General policy for HTTP (TCP port 80)
+# Kept as DENY by default for better security.
+# Change to ALLOW if you need to test allowing broad HTTP access.
+allowedProtocols=HTTP
+allowedDomains=
+allowedIPs=
+defaultAction=DENY
+---
+
+# --- COMMON LOCAL NETWORK DISCOVERY (OPTIONAL - ALLOW IF NEEDED) ---
+# These generate local network traffic. If you don't need/want to see them allowed,
+# you can comment out these sections or set defaultAction=DENY.
+# The global default will deny them if no policy is found.
+# Assumes getApplicationNameFromPort maps ports 5353 and 1900 to "GenericUDP"
+# or you create specific appName policies like "mDNS" and "SSDP".
+
+appName=GenericUDP
+# This policy can cover multiple UDP-based local services if they all map to "GenericUDP"
+allowedProtocols=UDP
+# IPs for mDNS (224.0.0.251 for port 5353) and SSDP (239.255.255.250 for port 1900)
+allowedIPs=224.0.0.251,239.255.255.250
+defaultAction=ALLOW
+---
+
+# --- POLICIES FROM YOUR ORIGINAL SIMULATION ---
+# Keep these if you still use the simulation mode with these app names.
+
+appName=BrowserApp
+# This policy is for your simulated "BrowserApp"
+allowedDomains=news.google.com,wikipedia.org,updates.vendor.com
+allowedProtocols=HTTPS,HTTP
+allowedIPs=8.8.8.8,5.6.7.8
+defaultAction=ALLOW
+---
+appName=MailClient
+# This policy is for your simulated "MailClient"
+allowedDomains=smtp.example.com,imap.example.com
+allowedProtocols=SMTP,IMAPS,SMTPS # Common mail protocols
+defaultAction=DENY
+---
+appName=UpdaterService
+# This policy is for your simulated "UpdaterService"
+allowedDomains=updates.vendor.com
+allowedProtocols=HTTPS
+defaultAction=ALLOW
+---
+
+# --- FALLBACKS for unmapped ports (if getApplicationNameFromPort returns these) ---
+
+appName=GenericTCP
+# Fallback for TCP traffic on unassigned/unrecognized ports
+allowedProtocols=TCP
+defaultAction=DENY # Deny unknown/unspecified TCP by default
+---
+# Note: GenericUDP was partially handled above for specific multicast.
+# If other UDP traffic maps to "GenericUDP" and isn't covered by the multicast IPs,
+# it will be denied by this policy if you add defaultAction=DENY here
+# or by the global default if this appName=GenericUDP block for general UDP doesn't exist.
+# For now, the GenericUDP above is for specific multicast. Other GenericUDP will hit global default.
+
+appName=UnknownApp
+# Policy for apps that couldn't be identified by port at all
+defaultAction=DENY
+
+# --- END OF DEFINED POLICIES ---
+# If an appName from a packet is not found above,
+# PolicyManager.getPolicyForApp(appName) will return null.
+# Then, FirewallAgent will use PolicyManager.getGlobalDefaultAction(),
+# which is hardcoded to DENY in your PolicyManager.java.

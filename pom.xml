@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.firewall</groupId> <!-- CHOOSE YOUR GroupId -->
+    <artifactId>context-aware-firewall</artifactId> <!-- YOUR PROJECT'S ArtifactId -->
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>11</maven.compiler.source> <!-- **SET YOUR JAVA VERSION (e.g., 1.8, 11, 17, 22)** -->
+        <maven.compiler.target>11</maven.compiler.target> <!-- **SET YOUR JAVA VERSION (must match source)** -->
+    </properties>
+
+    <dependencies>
+        <!-- Pcap4J Core -->
+        <dependency>
+            <groupId>org.pcap4j</groupId>
+            <artifactId>pcap4j-core</artifactId>
+            <version>1.8.2</version> <!-- Check Maven Central for the latest stable version -->
+        </dependency>
+
+        <!-- Pcap4J Static Packet Factory -->
+        <dependency>
+            <groupId>org.pcap4j</groupId>
+            <artifactId>pcap4j-packetfactory-static</artifactId>
+            <version>1.8.2</version> <!-- Use the same version as pcap4j-core -->
+        </dependency>
+
+        <!-- SLF4J API (Pcap4J uses SLF4J for logging) -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.32</version> <!-- Or a newer compatible version -->
+        </dependency>
+
+        <!-- Add a SLF4J binding, e.g., slf4j-simple for basic console logging -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.32</version> <!-- Or a newer compatible version -->
+            <scope>runtime</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- This plugin helps if you want to run your app directly using Maven -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.1.0</version> <!-- Or latest version -->
+                <configuration>
+                    <mainClass>com.firewall.main.FirewallSimulator</mainClass> <!-- **YOUR FULLY QUALIFIED MAIN CLASS HERE** -->
+                </configuration>
+            </plugin>
+            <!-- Optional: To build an executable JAR with dependencies (uber-JAR) -->
+            <!--
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.4</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>com.firewall.main.FirewallSimulator</mainClass> YOUR MAIN CLASS
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            -->
+        </plugins>
+    </build>
+</project>
