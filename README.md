@@ -1,34 +1,43 @@
+# 🔐 Centralized Context-Aware Firewall
 
-# 🔐 Centralized Application – Context-Aware Firewall
+![Java](https://img.shields.io/badge/Java-11%2B-orange?style=flat-square&logo=java)
+![Build](https://img.shields.io/badge/Build-Maven-blue?style=flat-square&logo=apachemaven)
+![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
+![Status](https://img.shields.io/badge/Status-Prototype-lightgrey?style=flat-square)
 
-A Java-based prototype firewall system that monitors, logs, and analyzes application-level network traffic using real-time packet capture. It applies context-aware policies and allows centralized control of firewall rules per application.
+A Java-based firewall prototype that monitors and controls network traffic using **context-aware policies**. Unlike traditional firewalls, it filters packets based on application identity, protocol, and destination context.
 
-## 📌 Project Overview
+## 🚀 Key Features
 
-This project simulates a **Context-Aware Firewall** that goes beyond traditional firewalls by considering:
+* **Context-Aware Filtering**: Decisions based on App Name, Domain, Protocol, and Port.
+* **Real-Time Packet Capture**: Live traffic monitoring using `Pcap4J` and `Npcap`/`Libpcap`.
+* **Interactive GUI**: Dashboard to view live traffic flows and allowed/denied statistics.
+* **Anomaly Detection**: Alerts on suspicious activities like excessive denied requests.
+* **Hot-Configurable**: Update rules in `policies.txt` without restarting.
 
-- Which **application** is generating the traffic
-- The **time** and **destination** of the request
-- Network parameters like **IP**, **port**, and **protocol**
+## 🛠 Tech Stack
 
-The system applies allow/deny decisions based on this context and provides real-time visibility through a GUI.
+* **Core**: Java 11, Apache Maven
+* **Networking**: Pcap4J (Packet Capture)
+* **UI**: Java Swing
 
-## 🚀 Features
+## 📋 Prerequisites
 
-- 🔍 **Real-Time Packet Capture** using Npcap and Pcap4J
-- ⚙️ **Context-Aware Rule Enforcement** based on application identity and destination
-- 📄 **Logging System** (`network_usage.log` and `alerts.log`) for network usage and anomalies
-- 🖥️ **Interactive GUI** to start/stop capture and view live traffic logs
-- 📁 **Centralized Policy Configuration** via `policies.txt`
-- 📊 **Traffic Analysis Panel** with statistics and colored decision indicators
+1.  **Java JDK 11+**
+2.  **Apache Maven**
+3.  **Packet Capture Driver**:
+    * *Windows*: [Npcap](https://npcap.com/) (Install in "WinPcap API-compatible Mode")
+    * *Linux*: `libpcap` (`sudo apt install libpcap-dev`)
 
-## 🧱 Architecture
+## ⚠️ Disclaimer
+* **This application is a Proof of Concept (PoC) and Simulation.**
+* **Not a Kernel Firewall**: It captures and analyzes copies of packets using Pcap4J but does not sit inline to block traffic at the OS level.
+* **Purpose**: Demonstrates context-aware logic and deep packet inspection (DPI) concepts in Java.
 
-- **FirewallAgent** – Core engine that checks packets against policies
-- **PolicyManager** – Parses and applies rules from policy files
-- **Npcap Integration** – Captures real network packets
-- **AlertEngine & Logger** – Logs activity and triggers alerts
-- **GUI (Swing-based)** – Real-time interface for monitoring and control
+## ⚡ Quick Start
 
-  ## ❗ Note
-This is a simulation and proof-of-concept, not a production firewall. It does not block traffic at the OS level but shows how context-aware logic can be applied on real traffic data.
+**Clone & Build**
+```bash
+git clone [https://github.com/vishalchoudhary07/centralized-context-aware-firewall.git](https://github.com/vishalchoudhary07/centralized-context-aware-firewall.git)
+cd centralized-context-aware-firewall
+mvn clean install
